@@ -96,6 +96,62 @@
             color: #3d4a6d;
             margin-top: 10px;
             line-height: 1.5;
+            overflow-wrap: anywhere;
+            word-break: break-word;
+        }
+        .entry-footer {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 12px;
+        }
+        .like-form {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .heart-button {
+            all: unset;
+            width: 18px;
+            height: 18px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex-shrink: 0;
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            box-shadow: none;
+            padding: 0;
+            margin: 0;
+            line-height: 1;
+        }
+        .heart-button:hover {
+            transform: none;
+            box-shadow: none;
+        }
+        .heart-button svg {
+            width: 18px;
+            height: 18px;
+            display: block;
+        }
+        .heart-button path {
+            fill: none;
+            stroke: #111;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        .heart-button.liked path {
+            fill: #111;
+            stroke: #111;
+        }
+        .like-count {
+            font-size: 14px;
+            color: #111;
+            font-weight: bold;
+            min-width: 10px;
+            line-height: 1;
         }
     </style>
 </head>
@@ -115,7 +171,60 @@
             <strong>{{ entry.name }}</strong>
             <div class="meta">{{ entry.email }} • {{ entry.time }}</div>
             <p>{{ entry.comment }}</p>
+            <div class="entry-footer">
+                <form method="POST" action="{{ url_for('like_entry', entry_id=entry.id) }}" class="like-form">
+                    <button type="submit" class="heart-button{% if entry.liked %} liked{% endif %}" aria-label="Like this message">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M12 21s-7.5-4.35-9.5-8.2C1.1 10.35 2.4 5 7.3 5c2.1 0 3.2 1.15 4.7 2.8C13.5 6.15 14.6 5 16.7 5c4.9 0 6.2 5.35 4.8 7.8C19.5 16.65 12 21 12 21z"></path>
+                        </svg>
+                    </button>
+                    {% if (entry.likes | default(0)) > 0 %}
+                        <span class="like-count">{{ entry.likes | default(0) }}</span>
+                    {% endif %}
+                </form>
+            </div>
         </div>
     {% endfor %}
+
+    <script>
+        document.querySelectorAll('.like-form').forEach((form) => {
+            form.addEventListener('submit', async (event) => {
+                event.preventDefault();
+
+                const button = form.querySelector('.heart-button');
+                const countNode = form.querySelector('.like-count');
+
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+
+                const data = await response.json();
+                if (!response.ok || !data) {
+                    return;
+                }
+
+                const likes = data.likes;
+                const liked = data.liked;
+
+                button.classList.toggle('liked', liked);
+
+                if (likes > 0) {
+                    if (countNode) {
+                        countNode.textContent = likes;
+                    } else {
+                        const newCount = document.createElement('span');
+                        newCount.className = 'like-count';
+                        newCount.textContent = likes;
+                        form.appendChild(newCount);
+                    }
+                } else if (countNode) {
+                    countNode.remove();
+                }
+            });
+        });
+    </script>
 </body>
 </html>
