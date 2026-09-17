@@ -2,7 +2,10 @@
 <html lang="sv">
 <head>
     <meta charset="UTF-8">
-    <title>Gästbok</title>
+    <title>Guestbook</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plaster&family=Wallpoet&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; }
         body { 
@@ -14,15 +17,19 @@
             min-height: 100vh;
         }
         h1 { 
+            font-family: 'Plaster', 'Wallpoet', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: #e8e8f0; 
             margin-bottom: 30px; 
             text-align: center;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
+            letter-spacing: 2px;
         }
         h2 { 
+            font-family: 'Plaster', 'Wallpoet', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: #d8dce8; 
             margin-top: 30px; 
             margin-bottom: 20px;
+            letter-spacing: 1px;
         }
         form { 
             margin-bottom: 30px; 
@@ -44,11 +51,15 @@
             color: #3d4a6d;
             transition: border-color 0.3s;
         }
+        textarea {
+            resize: none;
+        }
         input:focus, textarea:focus {
             outline: none;
             border-color: #5a6fa0;
         }
         button { 
+            font-family: 'Plaster', 'Wallpoet', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #4a5d8a 0%, #2f3d5f 100%);
             color: #e8e8f0; 
             padding: 12px 30px; 
@@ -89,16 +100,16 @@
     </style>
 </head>
 <body>
-    <h1>Gästbok</h1>
+    <h1>Guestbook</h1>
 
     <form method="POST">
-        <input type="text" name="name" placeholder="Ditt namn" required>
-        <input type="email" name="email" placeholder="Din e-post" required>
-        <textarea name="comment" placeholder="Skriv ett meddelande" required></textarea>
-        <button type="submit">Skicka</button>
+        <input type="text" name="name" placeholder="Your name" required>
+        <input type="email" name="email" placeholder="Your email" required>
+        <textarea name="comment" placeholder="Write a message" required></textarea>
+        <button type="submit">Publish</button>
     </form>
 
-    <h2>Inlägg</h2>
+    <h2>Posts</h2>
     {% for entry in entries %}
         <div class="entry">
             <strong>{{ entry.name }}</strong>
