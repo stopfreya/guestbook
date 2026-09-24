@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="sv">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Guestbook</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plaster&family=Wallpoet&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Wallpoet&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             max-width: 600px; 
@@ -17,19 +17,28 @@
             min-height: 100vh;
         }
         h1 { 
-            font-family: 'Plaster', 'Wallpoet', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Wallpoet', 'Segoe UI', sans-serif;
+            font-weight: normal;
+            letter-spacing: 2px;
             color: #e8e8f0; 
-            margin-bottom: 30px; 
+            margin-bottom: 10px; 
             text-align: center;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
-            letter-spacing: 2px;
         }
+        .navbar {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            margin-bottom: 30px;
+            font-size: 14px;
+            color: #c8ccdc;
+        }
+        .navbar a { color: #e8e8f0; text-decoration: none; }
+        .navbar a:hover { text-decoration: underline; color: #f5d76e; }
         h2 { 
-            font-family: 'Plaster', 'Wallpoet', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: #d8dce8; 
             margin-top: 30px; 
             margin-bottom: 20px;
-            letter-spacing: 1px;
         }
         form { 
             margin-bottom: 30px; 
@@ -38,28 +47,35 @@
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.15);
         }
-        input, textarea { 
+        .login-prompt {
+            background: #e8ecf5;
+            padding: 18px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+            color: #3d4a6d;
+        }
+        .login-prompt a {
+            color: #4a5d8a;
+            font-weight: bold;
+        }
+        .login-prompt a:hover {
+            color: #d8a31a;
+        }
+        textarea { 
             display: block; 
             width: 100%; 
             margin-bottom: 12px; 
             padding: 12px; 
-            box-sizing: border-box;
             border: 2px solid #a8b8d8;
             border-radius: 6px;
             font-size: 14px;
             background: white;
             color: #3d4a6d;
-            transition: border-color 0.3s;
-        }
-        textarea {
             resize: none;
         }
-        input:focus, textarea:focus {
-            outline: none;
-            border-color: #5a6fa0;
-        }
-        button { 
-            font-family: 'Plaster', 'Wallpoet', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        textarea:focus { outline: none; border-color: #5a6fa0; }
+        button.submit-btn { 
             background: linear-gradient(135deg, #4a5d8a 0%, #2f3d5f 100%);
             color: #e8e8f0; 
             padding: 12px 30px; 
@@ -69,162 +85,124 @@
             font-weight: bold;
             cursor: pointer;
             width: 100%;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: background 0.2s ease;
         }
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(74, 93, 138, 0.3);
+        button.submit-btn:hover {
+            background: linear-gradient(135deg, #f5d76e 0%, #d8a31a 100%);
         }
         .entry { 
+            position: relative;
             background: #f0f2f8;
             border-left: 4px solid #6a7ba8;
-            padding: 15px; 
+            padding: 15px 40px 30px 15px;
             margin-bottom: 15px;
             border-radius: 6px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        .entry strong { 
-            color: #4a5d8a;
-            font-size: 16px;
-        }
-        .entry .meta { 
-            color: #8a96b8; 
-            font-size: 0.85em; 
-            margin-top: 5px;
-        }
-        .entry p {
-            color: #3d4a6d;
-            margin-top: 10px;
-            line-height: 1.5;
-            overflow-wrap: anywhere;
-            word-break: break-word;
-        }
-        .entry-footer {
+        .entry strong { color: #4a5d8a; font-size: 16px; }
+        .entry .meta { color: #8a96b8; font-size: 0.85em; margin-top: 5px; }
+        .entry p { color: #3d4a6d; margin-top: 10px; line-height: 1.5; }
+
+        .like-btn {
+            position: absolute;
+            bottom: 10px;
+            right: 12px;
             display: flex;
-            justify-content: flex-end;
-            margin-top: 12px;
-        }
-        .like-form {
-            display: inline-flex;
             align-items: center;
-            gap: 6px;
-        }
-        .heart-button {
-            all: unset;
-            width: 18px;
-            height: 18px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            flex-shrink: 0;
-            background: transparent;
+            gap: 4px;
+            background: none;
             border: none;
-            border-radius: 0;
-            box-shadow: none;
-            padding: 0;
-            margin: 0;
-            line-height: 1;
+            cursor: pointer;
+            padding: 2px;
         }
-        .heart-button:hover {
-            transform: none;
-            box-shadow: none;
-        }
-        .heart-button svg {
+        .like-btn svg {
             width: 18px;
             height: 18px;
-            display: block;
-        }
-        .heart-button path {
+            stroke: #6a7ba8;
             fill: none;
-            stroke: #111;
             stroke-width: 2;
-            stroke-linecap: round;
-            stroke-linejoin: round;
+            transition: transform 0.15s;
         }
-        .heart-button.liked path {
-            fill: #111;
-            stroke: #111;
+        .like-btn:hover svg {
+            transform: scale(1.15);
+            stroke: #d8a31a;
+        }
+        .like-btn.liked svg {
+            fill: #1f2d47;
+            stroke: #1f2d47;
+            animation: pop 0.3s ease;
         }
         .like-count {
-            font-size: 14px;
-            color: #111;
-            font-weight: bold;
+            font-size: 13px;
+            color: #6a7ba8;
             min-width: 10px;
-            line-height: 1;
+            opacity: 0;
+            transform: translateY(4px);
+            transition: opacity 0.2s, transform 0.2s;
+        }
+        .like-count.show { opacity: 1; transform: translateY(0); }
+        @keyframes pop {
+            0% { transform: scale(1); }
+            40% { transform: scale(1.35); }
+            100% { transform: scale(1); }
         }
     </style>
 </head>
 <body>
     <h1>Guestbook</h1>
 
-    <form method="POST">
-        <input type="text" name="name" placeholder="Your name" required>
-        <input type="email" name="email" placeholder="Your email" required>
-        <textarea name="comment" placeholder="Write a message" required></textarea>
-        <button type="submit">Publish</button>
-    </form>
+    <div class="navbar">
+        {% if username %}
+            Logged in as <strong>{{ username }}</strong> · <a href="{{ url_for('logout') }}">Log out</a>
+        {% else %}
+            <a href="{{ url_for('login') }}">Login</a> · <a href="{{ url_for('register') }}">Register</a>
+        {% endif %}
+    </div>
 
-    <h2>Posts</h2>
+    {% if username %}
+        <form method="POST">
+            <textarea name="comment" placeholder="Write a message" required rows="3"></textarea>
+            <button type="submit" class="submit-btn">Send</button>
+        </form>
+    {% else %}
+        <div class="login-prompt">
+            You have to <a href="{{ url_for('login') }}">login</a> or <a href="{{ url_for('register') }}">create an account</a> to write a message.
+        </div>
+    {% endif %}
+
+    <h2>Entries</h2>
     {% for entry in entries %}
         <div class="entry">
             <strong>{{ entry.name }}</strong>
-            <div class="meta">{{ entry.email }} • {{ entry.time }}</div>
+            <div class="meta">{{ entry.time }}</div>
             <p>{{ entry.comment }}</p>
-            <div class="entry-footer">
-                <form method="POST" action="{{ url_for('like_entry', entry_id=entry.id) }}" class="like-form">
-                    <button type="submit" class="heart-button{% if entry.liked %} liked{% endif %}" aria-label="Like this message">
-                        <svg viewBox="0 0 24 24" aria-hidden="true">
-                            <path d="M12 21s-7.5-4.35-9.5-8.2C1.1 10.35 2.4 5 7.3 5c2.1 0 3.2 1.15 4.7 2.8C13.5 6.15 14.6 5 16.7 5c4.9 0 6.2 5.35 4.8 7.8C19.5 16.65 12 21 12 21z"></path>
-                        </svg>
-                    </button>
-                    {% if (entry.likes | default(0)) > 0 %}
-                        <span class="like-count">{{ entry.likes | default(0) }}</span>
-                    {% endif %}
-                </form>
-            </div>
+
+            <button class="like-btn" data-id="{{ entry.id }}" onclick="likeEntry(this)">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 21s-6.7-4.35-9.3-8.1C1 10.2 1.6 6.9 4.3 5.3c2.2-1.3 4.9-.7 6.4 1.2l1.3 1.6 1.3-1.6c1.5-1.9 4.2-2.5 6.4-1.2 2.7 1.6 3.3 4.9 1.6 7.6C18.7 16.65 12 21 12 21z"/>
+                </svg>
+                <span class="like-count">{{ entry.likes if entry.likes > 0 else '' }}</span>
+            </button>
         </div>
     {% endfor %}
 
     <script>
-        document.querySelectorAll('.like-form').forEach((form) => {
-            form.addEventListener('submit', async (event) => {
-                event.preventDefault();
+        function likeEntry(btn) {
+            const id = btn.getAttribute('data-id');
+            const countEl = btn.querySelector('.like-count');
 
-                const button = form.querySelector('.heart-button');
-                const countNode = form.querySelector('.like-count');
-
-                const response = await fetch(form.action, {
-                    method: 'POST',
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
+            fetch(`/like/${id}`, { method: 'POST' })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.likes !== undefined) {
+                        countEl.textContent = data.likes;
+                        countEl.classList.add('show');
+                        btn.classList.add('liked');
+                        btn.disabled = true;
                     }
-                });
-
-                const data = await response.json();
-                if (!response.ok || !data) {
-                    return;
-                }
-
-                const likes = data.likes;
-                const liked = data.liked;
-
-                button.classList.toggle('liked', liked);
-
-                if (likes > 0) {
-                    if (countNode) {
-                        countNode.textContent = likes;
-                    } else {
-                        const newCount = document.createElement('span');
-                        newCount.className = 'like-count';
-                        newCount.textContent = likes;
-                        form.appendChild(newCount);
-                    }
-                } else if (countNode) {
-                    countNode.remove();
-                }
-            });
-        });
+                })
+                .catch(err => console.error('Like failed:', err));
+        }
     </script>
 </body>
 </html>

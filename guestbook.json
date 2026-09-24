@@ -51,5 +51,47 @@
     "id": 6,
     "likes": 1,
     "liked": false
+  },
+  {
+    "id": "cfe3d5b7",
+    "name": "stopfreya",
+    "comment": "Hej!",
+    "time": "2026-09-24 12:52:27",
+    "likes": 0
+  },
+  {
+    "id": "05375721",
+    "name": "SUGMA",
+    "comment": "suc my dic",
+    "time": "2026-09-24 13:07:36",
+    "likes": 0
+  },
+  {
+    "id": "6a42a710",
+    "name": "ligma",
+    "comment": "ligma\r\n",
+    "time": "2026-09-24 13:08:15",
+    "likes": 0
+  },
+  {
+    "id": "19aa5a1d",
+    "name": "SUGMA",
+    "comment": "do you know what ligma is?",
+    "time": "2026-09-24 13:08:53",
+    "likes": 0
+  },
+  {
+    "id": "ba00e3cc",
+    "name": "ligma",
+    "comment": "i think i see where this is going but, what is ligma?",
+    "time": "2026-09-24 13:09:27",
+    "likes": 0
+  },
+  {
+    "id": "642e9117",
+    "name": "SUGMA",
+    "comment": "LIGMAAA BALLSSSS",
+    "time": "2026-09-24 13:10:11",
+    "likes": 0
   }
 ]
