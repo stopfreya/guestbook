@@ -7,7 +7,7 @@ import uuid
 from datetime import datetime
 
 app = Flask(__name__)
-app.secret_key = 'byt-ut-den-har-mot-nagot-hemligt'  # krävs för sessions
+app.secret_key = 'byt-ut-den-har-mot-nagot-hemligt'
 
 DATA_FILE = 'guestbook.json'
 USERS_FILE = 'users.json'
@@ -19,8 +19,32 @@ USERS_FILE = 'users.json'
 
 
 
+def find_node(nodes, target_id):
+    """Sök rekursivt efter en nod (inlägg eller svar) med givet id."""
+    for node in nodes:
+        if node['id'] == target_id:
+            return node
+        found = find_node(node.get('replies', []), target_id)
+        if found:
+            return found
+    return None
 
-
+def migrate_nodes(nodes):
+    """Se till att varje nod har id, likes och replies. Returnerar True om något ändrades."""
+    changed = False
+    for node in nodes:
+        if 'id' not in node:
+            node['id'] = str(uuid.uuid4())[:8]
+            changed = True
+        if 'likes' not in node:
+            node['likes'] = 0
+            changed = True
+        if 'replies' not in node:
+            node['replies'] = []
+            changed = True
+        if migrate_nodes(node['replies']):
+            changed = True
+    return changed
 
 def load_entries():
     if not os.path.exists(DATA_FILE):
@@ -28,15 +52,7 @@ def load_entries():
     with open(DATA_FILE, 'r', encoding='utf-8') as f:
         entries = json.load(f)
 
-    changed = False
-    for entry in entries:
-        if 'id' not in entry:
-            entry['id'] = str(uuid.uuid4())[:8]
-            changed = True
-        if 'likes' not in entry:
-            entry['likes'] = 0
-            changed = True
-    if changed:
+    if migrate_nodes(entries):
         save_entries(entries)
 
     return entries
@@ -44,8 +60,6 @@ def load_entries():
 def save_entries(entries):
     with open(DATA_FILE, 'w', encoding='utf-8') as f:
         json.dump(entries, f, ensure_ascii=False, indent=2)
-
-
 
 
 
@@ -79,7 +93,6 @@ def login_required(f):
 
 
 
-
 @app.route('/', methods=['GET', 'POST'])
 def index():
     entries = load_entries()
@@ -96,12 +109,36 @@ def index():
             'name': session['username'],
             'comment': comment,
             'time': time,
-            'likes': 0
+            'likes': 0,
+            'replies': []
         })
         save_entries(entries)
         return redirect(url_for('index'))
 
     return render_template('index.html', entries=reversed(entries), username=session.get('username'))
+
+
+@app.route('/reply/<parent_id>', methods=['POST'])
+@login_required
+def reply(parent_id):
+    entries = load_entries()
+    parent = find_node(entries, parent_id)
+
+    if parent is not None:
+        comment = request.form['comment']
+        time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+        parent['replies'].append({
+            'id': str(uuid.uuid4())[:8],
+            'name': session['username'],
+            'comment': comment,
+            'time': time,
+            'likes': 0,
+            'replies': []
+        })
+        save_entries(entries)
+
+    return redirect(url_for('index'))
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -111,11 +148,11 @@ def register():
         password = request.form['password']
 
         if not username or not password:
-            return render_template('register.html', error='Fyll i både användarnamn och lösenord.')
+            return render_template('register.html', error='Please enter both a username and a password.')
 
         users = load_users()
         if any(u['username'].lower() == username.lower() for u in users):
-            return render_template('register.html', error='Användarnamnet är upptaget.')
+            return render_template('register.html', error='This username is already taken.')
 
         users.append({
             'username': username,
@@ -142,7 +179,7 @@ def login():
             session['username'] = user['username']
             return redirect(url_for('index'))
 
-        return render_template('login.html', error='Fel användarnamn eller lösenord.')
+        return render_template('login.html', error='Invalid username or password.')
 
     return render_template('login.html')
 
@@ -153,17 +190,17 @@ def logout():
     return redirect(url_for('index'))
 
 
-@app.route('/like/<entry_id>', methods=['POST'])
-def like(entry_id):
+@app.route('/like/<node_id>', methods=['POST'])
+def like(node_id):
     entries = load_entries()
+    node = find_node(entries, node_id)
 
-    for entry in entries:
-        if entry['id'] == entry_id:
-            entry['likes'] += 1
-            save_entries(entries)
-            return jsonify({'likes': entry['likes']})
+    if node is None:
+        return jsonify({'error': 'Not found'}), 404
 
-    return jsonify({'error': 'Entry not found'}), 404
+    node['likes'] += 1
+    save_entries(entries)
+    return jsonify({'likes': node['likes']})
 
 
 if __name__ == '__main__':
