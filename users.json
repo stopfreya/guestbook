@@ -14,5 +14,9 @@
   {
     "username": "ligma",
     "password_hash": "scrypt:32768:8:1$YHuX8mauFn87S7Se$0704bdab91cdbc8957bbcf7e7b4a901378faf0b2789b808de69763a6a317bd5be266d4c4c3ede7c96ecb7d959f161658754c7347295e0ef9e4f3f479b328793b"
+  },
+  {
+    "username": "Broki",
+    "password_hash": "scrypt:32768:8:1$YmYvDSgLxAd88fkz$dd90a3fcb896cac46b729621e5cb631adbf237fb80e4ad0a4706ee0030da5669888e09957eb4093415761adbb4b6a327949bd75aa36e4ff1cff6edd868b00206"
   }
 ]

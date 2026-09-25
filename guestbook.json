@@ -3,68 +3,157 @@
     "name": "Fabian Samuelsson",
     "comment": "TTTTTOOOORRRBJJJÖÖÖÖRRNNNN LLLIIIIINNNNDDDDHOLLMMMM",
     "time": "2026-09-10 13:22:32",
-    "likes": 3,
-    "id": 1,
+    "likes": 4,
+    "id": "1",
     "liked": false,
-    "replies": []
+    "replies": [],
+    "liked_by": [
+      "legacy",
+      "legacy",
+      "legacy",
+      "user:Broki"
+    ]
   },
   {
     "name": "Patrik Oxenstrand juegtvaiuks",
     "email": "n@N",
     "comment": "jenfOLAJKDB ",
     "time": "2026-09-10 13:25:50",
-    "id": 2,
+    "id": "2",
     "likes": 0,
     "liked": false,
-    "replies": []
+    "replies": [],
+    "liked_by": []
   },
   {
     "name": "brudda",
     "email": "brudda@bruh",
     "comment": "tggtvr",
     "time": "2026-09-11 11:10:00",
-    "id": 3,
+    "id": "3",
     "likes": 1,
     "liked": false,
-    "replies": []
+    "replies": [],
+    "liked_by": [
+      "legacy"
+    ]
   },
   {
     "name": "Holgrr",
     "email": "holger@taby.se",
     "comment": "Jag gillar sockerkaka!",
     "time": "2026-09-17 12:39:36",
-    "id": 4,
+    "id": "4",
     "likes": 1,
     "liked": true,
-    "replies": []
+    "replies": [],
+    "liked_by": [
+      "legacy"
+    ]
   },
   {
     "name": "William Johansson",
     "email": "william.johansson1@skola.taby.se",
     "comment": "bästa raze main någonsin",
     "time": "2026-09-17 12:43:08",
-    "id": 5,
+    "id": "5",
     "likes": 67,
     "liked": true,
-    "replies": []
+    "replies": [],
+    "liked_by": [
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy",
+      "legacy"
+    ]
   },
   {
     "name": "nossrorB rendexelA",
     "email": "bimbon@gmail.com",
     "comment": "rendexelA reteh geJ",
     "time": "2026-09-17 12:47:08",
-    "id": 6,
-    "likes": 1,
+    "id": "6",
+    "likes": 2,
     "liked": false,
-    "replies": []
+    "replies": [],
+    "liked_by": [
+      "legacy",
+      "user:Broki"
+    ]
   },
   {
     "id": "cfe3d5b7",
     "name": "stopfreya",
     "comment": "Hej!",
     "time": "2026-09-24 12:52:27",
-    "likes": 0,
-    "replies": []
+    "likes": 1,
+    "replies": [],
+    "liked_by": [
+      "legacy"
+    ]
   },
   {
     "id": "05375721",
@@ -72,15 +161,19 @@
     "comment": "suc my dic",
     "time": "2026-09-24 13:07:36",
     "likes": 0,
-    "replies": []
+    "replies": [],
+    "liked_by": []
   },
   {
     "id": "6a42a710",
     "name": "ligma",
     "comment": "ligma\r\n",
     "time": "2026-09-24 13:08:15",
-    "likes": 0,
-    "replies": []
+    "likes": 1,
+    "replies": [],
+    "liked_by": [
+      "legacy"
+    ]
   },
   {
     "id": "19aa5a1d",
@@ -88,7 +181,8 @@
     "comment": "do you know what ligma is?",
     "time": "2026-09-24 13:08:53",
     "likes": 0,
-    "replies": []
+    "replies": [],
+    "liked_by": []
   },
   {
     "id": "ba00e3cc",
@@ -96,23 +190,44 @@
     "comment": "i think i see where this is going but, what is ligma?",
     "time": "2026-09-24 13:09:27",
     "likes": 0,
-    "replies": []
+    "replies": [],
+    "liked_by": []
   },
   {
     "id": "642e9117",
     "name": "SUGMA",
     "comment": "LIGMAAA BALLSSSS",
     "time": "2026-09-24 13:10:11",
-    "likes": 1,
+    "likes": 2,
     "replies": [
       {
         "id": "cf583581",
         "name": "SUGMA",
         "comment": "why am i like this?",
         "time": "2026-09-25 11:25:54",
-        "likes": 2,
-        "replies": []
+        "likes": 3,
+        "replies": [],
+        "liked_by": [
+          "legacy",
+          "legacy",
+          "user:Broki"
+        ]
       }
+    ],
+    "liked_by": [
+      "legacy",
+      "user:Broki"
     ]
+  },
+  {
+    "id": "5cdd211a",
+    "name": "Broki",
+    "comment": "like if school lunch sucks",
+    "time": "2026-09-25 11:49:38",
+    "likes": 1,
+    "liked_by": [
+      "user:Broki"
+    ],
+    "replies": []
   }
 ]

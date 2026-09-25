@@ -9,8 +9,9 @@ from datetime import datetime
 app = Flask(__name__)
 app.secret_key = 'byt-ut-den-har-mot-nagot-hemligt'
 
-DATA_FILE = 'guestbook.json'
-USERS_FILE = 'users.json'
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DATA_FILE = os.path.join(BASE_DIR, 'guestbook.json')
+USERS_FILE = os.path.join(BASE_DIR, 'users.json')
 
 
 
@@ -21,8 +22,9 @@ USERS_FILE = 'users.json'
 
 def find_node(nodes, target_id):
     """Sök rekursivt efter en nod (inlägg eller svar) med givet id."""
+    target_id = str(target_id)
     for node in nodes:
-        if node['id'] == target_id:
+        if str(node.get('id')) == target_id:
             return node
         found = find_node(node.get('replies', []), target_id)
         if found:
@@ -30,14 +32,20 @@ def find_node(nodes, target_id):
     return None
 
 def migrate_nodes(nodes):
-    """Se till att varje nod har id, likes och replies. Returnerar True om något ändrades."""
+    """Se till att varje nod har id, likes, liked_by och replies. Returnerar True om något ändrades."""
     changed = False
     for node in nodes:
         if 'id' not in node:
             node['id'] = str(uuid.uuid4())[:8]
             changed = True
+        elif not isinstance(node['id'], str):
+            node['id'] = str(node['id'])
+            changed = True
         if 'likes' not in node:
             node['likes'] = 0
+            changed = True
+        if 'liked_by' not in node or not isinstance(node.get('liked_by'), list):
+            node['liked_by'] = []
             changed = True
         if 'replies' not in node:
             node['replies'] = []
@@ -93,6 +101,18 @@ def login_required(f):
 
 
 
+def get_like_key():
+    if 'username' in session:
+        return f'user:{session["username"]}'
+
+    anon_key = session.get('anon_like_id')
+    if not anon_key:
+        anon_key = str(uuid.uuid4())
+        session['anon_like_id'] = anon_key
+
+    return f'anon:{anon_key}'
+
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     entries = load_entries()
@@ -110,12 +130,18 @@ def index():
             'comment': comment,
             'time': time,
             'likes': 0,
+            'liked_by': [],
             'replies': []
         })
         save_entries(entries)
         return redirect(url_for('index'))
 
-    return render_template('index.html', entries=reversed(entries), username=session.get('username'))
+    return render_template(
+        'index.html',
+        entries=reversed(entries),
+        username=session.get('username'),
+        current_like_key=get_like_key()
+    )
 
 
 @app.route('/reply/<parent_id>', methods=['POST'])
@@ -134,6 +160,7 @@ def reply(parent_id):
             'comment': comment,
             'time': time,
             'likes': 0,
+            'liked_by': [],
             'replies': []
         })
         save_entries(entries)
@@ -198,9 +225,23 @@ def like(node_id):
     if node is None:
         return jsonify({'error': 'Not found'}), 404
 
-    node['likes'] += 1
+    if 'liked_by' not in node or not isinstance(node['liked_by'], list):
+        node['liked_by'] = []
+
+    like_key = get_like_key()
+    liked_by = node['liked_by']
+
+    if like_key in liked_by:
+        liked_by.remove(like_key)
+        node['likes'] = max(0, node['likes'] - 1)
+        liked = False
+    else:
+        liked_by.append(like_key)
+        node['likes'] += 1
+        liked = True
+
     save_entries(entries)
-    return jsonify({'likes': node['likes']})
+    return jsonify({'likes': node['likes'], 'liked': liked})
 
 
 if __name__ == '__main__':
