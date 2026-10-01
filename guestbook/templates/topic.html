@@ -2,42 +2,34 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Guestbook</title>
+    <title>{{ topic.title }} - Forum</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Wallpoet&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            max-width: 600px; 
-            margin: 0 auto; 
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 650px;
+            margin: 0 auto;
             padding: 20px;
             background: linear-gradient(135deg, #3d4a6d 0%, #1f2d47 100%);
             min-height: 100vh;
         }
-        h1 { 
+        .back-link { display: inline-block; color: #c8ccdc; font-size: 14px; margin-bottom: 14px; text-decoration: none; }
+        .back-link:hover { text-decoration: underline; }
+        h1 {
             font-family: 'Wallpoet', 'Segoe UI', sans-serif;
             font-weight: normal;
-            letter-spacing: 2px;
-            color: #e8e8f0; 
-            margin-bottom: 10px; 
-            text-align: center;
+            letter-spacing: 1px;
+            font-size: 24px;
+            color: #e8e8f0;
+            margin-bottom: 6px;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
         }
-        .navbar {
-            display: flex;
-            justify-content: center;
-            gap: 14px;
-            margin-bottom: 30px;
-            font-size: 14px;
-            color: #c8ccdc;
-        }
-        .navbar a { color: #e8e8f0; text-decoration: none; }
-        .navbar a:hover { text-decoration: underline; }
-        h2 { color: #d8dce8; margin-top: 30px; margin-bottom: 20px; }
-        form.main-form { 
-            margin-bottom: 30px; 
+        .topic-meta { color: #a8aecc; font-size: 13px; margin-bottom: 25px; }
+        form.main-form {
+            margin-bottom: 25px;
             background: #e8ecf5;
             padding: 20px;
             border-radius: 10px;
@@ -47,16 +39,16 @@
             background: #e8ecf5;
             padding: 18px;
             border-radius: 10px;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             text-align: center;
             color: #3d4a6d;
         }
         .login-prompt a { color: #4a5d8a; font-weight: bold; }
-        textarea { 
-            display: block; 
-            width: 100%; 
-            margin-bottom: 10px; 
-            padding: 10px; 
+        textarea {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
             border: 2px solid #a8b8d8;
             border-radius: 6px;
             font-size: 14px;
@@ -66,10 +58,10 @@
             font-family: inherit;
         }
         textarea:focus { outline: none; border-color: #5a6fa0; }
-        button.submit-btn { 
+        button.submit-btn {
             background: linear-gradient(135deg, #4a5d8a 0%, #2f3d5f 100%);
-            color: #e8e8f0; 
-            padding: 12px 30px; 
+            color: #e8e8f0;
+            padding: 12px 30px;
             border: none;
             border-radius: 6px;
             font-size: 16px;
@@ -77,7 +69,7 @@
             cursor: pointer;
             width: 100%;
         }
-        .entry { 
+        .entry {
             position: relative;
             background: #f0f2f8;
             border-left: 4px solid #6a7ba8;
@@ -148,24 +140,18 @@
     </style>
 </head>
 <body>
-    <h1>Guestbook</h1>
-
-    <div class="navbar">
-        {% if username %}
-            Logged in as <strong>{{ username }}</strong> · <a href="{{ url_for('logout') }}">Log out</a> · <a href="{{ url_for('forum') }}">Forum</a>
-        {% else %}
-            <a href="{{ url_for('login') }}">Log in</a> · <a href="{{ url_for('register') }}">Register</a> · <a href="{{ url_for('forum') }}">Forum</a>
-        {% endif %}
-    </div>
+    <a class="back-link" href="{{ url_for('forum') }}">&larr; Back to forum</a>
+    <h1>{{ topic.title }}</h1>
+    <div class="topic-meta">started by {{ topic.creator }} · {{ topic.time }}</div>
 
     {% if username %}
         <form class="main-form" method="POST">
             <textarea name="comment" placeholder="Write a message" required rows="3"></textarea>
-            <button type="submit" class="submit-btn">Send</button>
+            <button type="submit" class="submit-btn">Post</button>
         </form>
     {% else %}
         <div class="login-prompt">
-            Du måste <a href="{{ url_for('login') }}">logga in</a> eller <a href="{{ url_for('register') }}">skapa ett konto</a> för att skriva ett inlägg.
+            You must <a href="{{ url_for('login') }}">log in</a> or <a href="{{ url_for('register') }}">create an account</a> to post.
         </div>
     {% endif %}
 
@@ -183,17 +169,20 @@
             <strong>{{ node.name }}</strong>
             <div class="meta">{{ node.time }}</div>
             <p>{{ node.comment }}</p>
+
             <div class="node-actions">
                 {% if username %}
                     <button class="reply-toggle-btn" onclick="toggleReplyForm(this)">Reply</button>
                 {% endif %}
             </div>
+
             {% if username %}
-                <form class="reply-form" style="display:none;" method="POST" action="{{ url_for('reply', parent_id=node.id) }}">
+                <form class="reply-form" style="display:none;" method="POST" action="{{ url_for('topic_reply', topic_id=topic.id, parent_id=node.id) }}">
                     <textarea name="comment" required placeholder="Write a reply..." rows="2"></textarea>
                     <button type="submit">Send</button>
                 </form>
             {% endif %}
+
             {{ like_button(node) }}
             {{ render_replies(node.replies) }}
         </div>
@@ -215,33 +204,38 @@
         {% endif %}
     {% endmacro %}
 
-    <h2>Entries</h2>
-    {% for entry in entries %}
-        <div class="entry{% if entry.replies %} has-replies{% endif %}">
-            <strong>{{ entry.name }}</strong>
-            <div class="meta">{{ entry.time }}</div>
-            <p>{{ entry.comment }}</p>
+    {% for post in posts %}
+        <div class="entry{% if post.replies %} has-replies{% endif %}">
+            <strong>{{ post.name }}</strong>
+            <div class="meta">{{ post.time }}</div>
+            <p>{{ post.comment }}</p>
+
             <div class="node-actions">
                 {% if username %}
                     <button class="reply-toggle-btn" onclick="toggleReplyForm(this)">Reply</button>
                 {% endif %}
             </div>
+
             {% if username %}
-                <form class="reply-form" style="display:none;" method="POST" action="{{ url_for('reply', parent_id=entry.id) }}">
+                <form class="reply-form" style="display:none;" method="POST" action="{{ url_for('topic_reply', topic_id=topic.id, parent_id=post.id) }}">
                     <textarea name="comment" required placeholder="Write a reply..." rows="2"></textarea>
                     <button type="submit">Send</button>
                 </form>
             {% endif %}
-            {{ like_button(entry) }}
-            {{ render_replies(entry.replies) }}
+
+            {{ like_button(post) }}
+            {{ render_replies(post.replies) }}
         </div>
     {% endfor %}
 
     <script>
+        const topicId = "{{ topic.id }}";
+
         function likeEntry(btn) {
             const id = btn.getAttribute('data-id');
             const countEl = btn.querySelector('.like-count');
-            fetch(`/like/${id}`, { method: 'POST' })
+
+            fetch(`/forum/${topicId}/like/${id}`, { method: 'POST' })
                 .then(res => res.json())
                 .then(data => {
                     if (data.likes !== undefined) {
@@ -252,10 +246,12 @@
                 })
                 .catch(err => console.error('Like failed:', err));
         }
+
         function toggleReplyForm(btn) {
             const form = btn.parentElement.nextElementSibling;
             form.style.display = (form.style.display === 'none') ? 'block' : 'none';
         }
+
         function toggleReplies(btn) {
             const hidden = btn.nextElementSibling;
             const expanded = hidden.style.display === 'block';

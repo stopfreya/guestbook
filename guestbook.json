@@ -3,7 +3,7 @@
     "name": "Fabian Samuelsson",
     "comment": "TTTTTOOOORRRBJJJÖÖÖÖRRNNNN LLLIIIIINNNNDDDDHOLLMMMM",
     "time": "2026-09-10 13:22:32",
-    "likes": 4,
+    "likes": 5,
     "id": "1",
     "liked": false,
     "replies": [],
@@ -11,7 +11,8 @@
       "legacy",
       "legacy",
       "legacy",
-      "user:Broki"
+      "user:Broki",
+      "user:stopfreyy"
     ]
   },
   {
@@ -44,11 +45,12 @@
     "comment": "Jag gillar sockerkaka!",
     "time": "2026-09-17 12:39:36",
     "id": "4",
-    "likes": 1,
+    "likes": 2,
     "liked": true,
     "replies": [],
     "liked_by": [
-      "legacy"
+      "legacy",
+      "user:stopfreyy"
     ]
   },
   {
@@ -136,12 +138,13 @@
     "comment": "rendexelA reteh geJ",
     "time": "2026-09-17 12:47:08",
     "id": "6",
-    "likes": 2,
+    "likes": 3,
     "liked": false,
     "replies": [],
     "liked_by": [
       "legacy",
-      "user:Broki"
+      "user:Broki",
+      "user:stopfreyy"
     ]
   },
   {
@@ -198,7 +201,7 @@
     "name": "SUGMA",
     "comment": "LIGMAAA BALLSSSS",
     "time": "2026-09-24 13:10:11",
-    "likes": 2,
+    "likes": 3,
     "replies": [
       {
         "id": "cf583581",
@@ -216,7 +219,8 @@
     ],
     "liked_by": [
       "legacy",
-      "user:Broki"
+      "user:Broki",
+      "user:stopfreyy"
     ]
   },
   {
@@ -224,9 +228,10 @@
     "name": "Broki",
     "comment": "like if school lunch sucks",
     "time": "2026-09-25 11:49:38",
-    "likes": 1,
+    "likes": 2,
     "liked_by": [
-      "user:Broki"
+      "user:Broki",
+      "user:stopfreyy"
     ],
     "replies": []
   }

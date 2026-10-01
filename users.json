@@ -18,5 +18,9 @@
   {
     "username": "Broki",
     "password_hash": "scrypt:32768:8:1$YmYvDSgLxAd88fkz$dd90a3fcb896cac46b729621e5cb631adbf237fb80e4ad0a4706ee0030da5669888e09957eb4093415761adbb4b6a327949bd75aa36e4ff1cff6edd868b00206"
+  },
+  {
+    "username": "stopfreyy",
+    "password_hash": "scrypt:32768:8:1$JZF5awWvAkc4DBYI$90d1695a12fa7b96ffd5c90149260e3496a69be0ffc1d60ee1682074458be6cf6f9c2986a48d91cbfae593917358a824e41f38bf83f4952923f63fef345aca24"
   }
 ]

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Forum</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Wallpoet&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 650px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #3d4a6d 0%, #1f2d47 100%);
+            min-height: 100vh;
+        }
+        h1 {
+            font-family: 'Wallpoet', 'Segoe UI', sans-serif;
+            font-weight: normal;
+            letter-spacing: 2px;
+            color: #e8e8f0;
+            margin-bottom: 10px;
+            text-align: center;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
+        }
+        .navbar {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            margin-bottom: 30px;
+            font-size: 14px;
+            color: #c8ccdc;
+        }
+        .navbar a { color: #e8e8f0; text-decoration: none; }
+        .navbar a:hover { text-decoration: underline; }
+        .new-topic-btn {
+            display: block;
+            text-align: center;
+            background: linear-gradient(135deg, #4a5d8a 0%, #2f3d5f 100%);
+            color: #e8e8f0;
+            padding: 12px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-bottom: 25px;
+        }
+        .login-prompt {
+            background: #e8ecf5;
+            padding: 18px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            text-align: center;
+            color: #3d4a6d;
+        }
+        .login-prompt a { color: #4a5d8a; font-weight: bold; }
+        .topic-card {
+            display: block;
+            background: #f0f2f8;
+            border-left: 4px solid #6a7ba8;
+            padding: 15px;
+            margin-bottom: 12px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-decoration: none;
+        }
+        .topic-card:hover { background: #e4e8f4; }
+        .topic-title { color: #4a5d8a; font-size: 17px; font-weight: bold; }
+        .topic-meta { color: #8a96b8; font-size: 0.85em; margin-top: 5px; }
+        .topic-count {
+            float: right;
+            background: #6a7ba8;
+            color: white;
+            font-size: 12px;
+            padding: 2px 9px;
+            border-radius: 12px;
+        }
+        .empty { text-align: center; color: #c8ccdc; margin-top: 40px; }
+    </style>
+</head>
+<body>
+    <h1>Forum</h1>
+
+    <div class="navbar">
+        {% if username %}
+            Logged in as <strong>{{ username }}</strong> · <a href="{{ url_for('logout') }}">Log out</a> · <a href="{{ url_for('index') }}">Guestbook</a>
+        {% else %}
+            <a href="{{ url_for('login') }}">Log in</a> · <a href="{{ url_for('register') }}">Register</a> · <a href="{{ url_for('index') }}">Guestbook</a>
+        {% endif %}
+    </div>
+
+    {% if username %}
+        <a class="new-topic-btn" href="{{ url_for('new_topic') }}">+ New topic</a>
+    {% else %}
+        <div class="login-prompt">
+            You must <a href="{{ url_for('login') }}">log in</a> or <a href="{{ url_for('register') }}">create an account</a> to start a new topic.
+        </div>
+    {% endif %}
+
+    {% if topics %}
+        {% for topic in topics %}
+            <a class="topic-card" href="{{ url_for('view_topic', topic_id=topic.id) }}">
+                <span class="topic-count">{{ topic.posts|length }}</span>
+                <div class="topic-title">{{ topic.title }}</div>
+                <div class="topic-meta">started by {{ topic.creator }} · {{ topic.time }}</div>
+            </a>
+        {% endfor %}
+    {% else %}
+        <div class="empty">No topics yet. Be the first to start one!</div>
+    {% endif %}
+</body>
+</html>

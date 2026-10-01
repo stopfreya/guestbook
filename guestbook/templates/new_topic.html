@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>New topic - Forum</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #3d4a6d 0%, #1f2d47 100%);
+        }
+        .box {
+            background: #e8ecf5;
+            padding: 30px;
+            border-radius: 10px;
+            width: 420px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+        }
+        h1 { color: #3d4a6d; margin-bottom: 20px; font-size: 22px; }
+        input, textarea {
+            display: block;
+            width: 100%;
+            margin-bottom: 12px;
+            padding: 12px;
+            border: 2px solid #a8b8d8;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+        textarea { resize: vertical; }
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            background: linear-gradient(135deg, #4a5d8a 0%, #2f3d5f 100%);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .error { color: #a83232; margin-bottom: 12px; font-size: 14px; }
+        p { margin-top: 16px; font-size: 14px; text-align: center; }
+        a { color: #4a5d8a; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h1>Start a new topic</h1>
+        {% if error %}<div class="error">{{ error }}</div>{% endif %}
+        <form method="POST">
+            <input type="text" name="title" placeholder="Topic title" required>
+            <textarea name="comment" rows="4" placeholder="Write your first message..." required></textarea>
+            <button type="submit">Create topic</button>
+        </form>
+        <p><a href="{{ url_for('forum') }}">Back to forum</a></p>
+    </div>
+</body>
+</html>
